@@ -19,3 +19,27 @@ This blueprint utilizes **RFC 8693 (OAuth 2.0 Token Exchange)** to implement "Id
 ## Architecture
 
 The flow ensures that Agent B only receives a scoped token for a specific task, authorized by Agent A, originally triggered by a Human User.
+
+
+sequenceDiagram
+    participant Human as 👤 Human User
+    participant Okta as 🔐 Okta / Agent Gateway
+    participant AgentA as 🤖 Research Agent (Actor)
+    participant AgentB as 🗄️ Data Service (Resource)
+
+    Note over Human, Okta: Initial Authentication
+    Human->>Okta: Authenticate (OIDC)
+    Okta-->>Human: Issue Human JWT (sub: alexey@ent.com)
+
+    Note over Human, AgentA: Task Delegation
+    Human->>AgentA: Trigger Research Task + Human JWT
+
+    Note over AgentA, Okta: Token Exchange (RFC 8693)
+    AgentA->>Okta: Request Chained Token (Subject: Human, Actor: AgentA)
+    Okta->>Okta: Validate Policy (OPA) & Attestation
+    Okta-->>AgentA: Issue Chained JWT (sub: Human, act: AgentA)
+
+    Note over AgentA, AgentB: Secure Execution
+    AgentA->>AgentB: Request Data + Chained JWT
+    AgentB->>AgentB: Verify Chain & Scope
+    AgentB-->>AgentA: Return Scoped Data
