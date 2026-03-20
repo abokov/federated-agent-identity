@@ -1,0 +1,21 @@
+# Federated Identity for AI Agents (NHI)
+
+This repository outlines an architectural blueprint for **Non-Human Identity (NHI)** federation in the Agentic Enterprise. As we move from human-centric SSO to autonomous agent workflows, the industry faces a "Secret Zero" problem and a massive expansion of the attack surface.
+
+## The Problem: Identity Fragmentation
+In multi-cloud environments, AI agents often rely on long-lived, static API keys or over-privileged service accounts. This creates:
+* **Credential Rot:** Static secrets are rarely rotated.
+* **Audit Blindness:** No cryptographic link between the human's intent and the agent's action.
+* **Handshake Latency:** Standard PQC signatures add significant overhead (15KB+) to high-frequency agent calls.
+
+## The Solution: Token Chaining & Ephemeral Federation
+This blueprint utilizes **RFC 8693 (OAuth 2.0 Token Exchange)** to implement "Identity-as-a-Service" for agents. 
+
+### Key Features:
+1. **Cryptographic Lineage:** Every agent action is bound to a "Subject" (Human) and an "Actor" (Agent) claim.
+2. **Policy-Driven Authorization:** Rights are not static; they are calculated just-in-time via OPA (Open Policy Agent).
+3. **MTC Optimization:** Utilizing Merkle Tree Certificates to reduce handshake overhead in agent-to-agent communication.
+
+## Architecture
+
+The flow ensures that Agent B only receives a scoped token for a specific task, authorized by Agent A, originally triggered by a Human User.
