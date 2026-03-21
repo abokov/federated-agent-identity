@@ -56,3 +56,41 @@ sequenceDiagram
     AgentA->>AgentB: Request Data + Chained JWT
     AgentB->>AgentB: Verify Chain & Scope
     AgentB-->>AgentA: Return Scoped Data
+
+## 🚀 Quick Start (Proof of Concept)
+1. Run the OPA Policy Server
+Start the local decision engine that evaluates agent token requests using the provided Rego policies.
+
+```Bash
+# Ensure Open Policy Agent (OPA) is installed
+opa run --server ./agent_rights_policy.rego
+```
+
+## 2. Execute the Agent Delegation Flow
+Run the simulation where a "Research Agent" requests a downstream token to trigger a "Database Agent".
+
+```Bash
+# Ensure Python 3.10+ is installed
+python agent_token_exchange.py
+```
+
+### 3. Expected Output
+When the script runs, the mock IdP intercepts the request, evaluates the Rego policy, and issues a restricted, cryptographically verifiable delegated token:
+```text
+[INFO] Research_Agent requesting delegation to Database_Agent...
+[POLICY_ENGINE] Evaluating contextual risk...
+[POLICY_ENGINE] Risk score: LOW. Approved for scope: 'read:anonymized_data'.
+[IDP] Token Exchange Successful (RFC 8693).
+[IDP] Issued Actor Token: eyJhbGciOi...
+[INFO] Database_Agent executing query with delegated authority.
+```
+
+## 📬 Contact & License
+Author: Alexey Bokov
+
+Contact: alex@bokov.net
+
+License: Apache 2.0
+
+
+
