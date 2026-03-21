@@ -56,6 +56,7 @@ sequenceDiagram
     AgentA->>AgentB: Request Data + Chained JWT
     AgentB->>AgentB: Verify Chain & Scope
     AgentB-->>AgentA: Return Scoped Data
+```
 
 ## 🚀 Quick Start (Proof of Concept)
 1. Run the OPA Policy Server
