@@ -58,6 +58,7 @@ sequenceDiagram
     AgentB-->>AgentA: Return Scoped Data
 ```
 
+
 ## 🚀 Quick Start (Proof of Concept)
 1. Run the OPA Policy Server
 Start the local decision engine that evaluates agent token requests using the provided Rego policies.
